@@ -90,7 +90,18 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return 0;
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        else if (isLeaf()) {
+            return this.root;
+        }
+        else if (path.startsWith("l")) {
+            return this.left.retrieve(path.substring(1));
+        }
+        else {
+            return this.right.retrieve(path.substring(1));
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -137,11 +148,11 @@ public class NumberTriangle {
             // TODO process the line
 
             // Iterate over each Number Triangle already created from the previous line.
-            for (int i = 0; i < previous.length; i++) {
+            for (int i = 0; i < line.length; i++) {
                 // Add a NumberTriangle to ArrayList of current NumberTriangle's for each int in current line.
                 nc.add(new NumberTriangle(line[i]));
             }
-            for (int i = 1; i < previous.length; i++) {
+            for (int i = 0; i < previous.length; i++) {
                 // Sets the left of the triangle to be the one at the same index
                 np.get(i).setLeft(nc.get(i));
                 // Sets the right of the triangle to be the one at the same index plus one.
