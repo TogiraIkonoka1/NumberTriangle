@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -89,7 +90,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return -1;
+        return 0;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -111,24 +112,57 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
-        String line = br.readLine();
-        while (line != null) {
+        // Makes string of current line.
+        String stringPrevious = br.readLine();
+        // Makes int array of current line.
+        int[] previous = parseLine(stringPrevious);
+        // Defines top NumberTriangle to return.
+        NumberTriangle top = new NumberTriangle(previous[0]);
+        // Makes ArrayList of NumberTriangle's already created.
+        ArrayList<NumberTriangle> np = new ArrayList<>();
+        // Adds top to list of NumberTriangle's already created.
+        np.add(top);
+        // Moves to next line.
+        String stringLine = br.readLine();
+        // Iterate over remaining lines.
+        while (stringLine != null) {
+            // Makes int array of line being looked at.
+            int[] line = parseLine(stringLine);
+            //  Makes ArrayList of Number Triangles belonging to current line being looked at.
+            ArrayList<NumberTriangle> nc = new ArrayList<>();
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            //ystem.out.println(stringLine);
 
             // TODO process the line
 
+            // Iterate over each Number Triangle already created from the previous line.
+            for (int i = 0; i < previous.length; i++) {
+                // Add a NumberTriangle to ArrayList of current NumberTriangle's for each int in current line.
+                nc.add(new NumberTriangle(line[i]));
+            }
+            for (int i = 1; i < previous.length; i++) {
+                // Sets the left of the triangle to be the one at the same index
+                np.get(i).setLeft(nc.get(i));
+                // Sets the right of the triangle to be the one at the same index plus one.
+                np.get(i).setRight(nc.get(i+1));
+            }
+            np = nc;
+            previous = line;
             //read the next line
-            line = br.readLine();
+            stringLine = br.readLine();
         }
         br.close();
         return top;
+    }
+    // Helper for converting file lines from strings to int arrays.
+    public static int[] parseLine(String line) {
+        String[] stringArray = line.split(" ");
+        int[] intArray = new int[stringArray.length];
+        for (int i = 0; i < stringArray.length; i++) {
+            intArray[i] = Integer.parseInt(stringArray[i]);
+        }
+        return intArray;
     }
 
     public static void main(String[] args) throws IOException {
